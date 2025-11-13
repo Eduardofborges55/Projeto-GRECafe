@@ -1,41 +1,21 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import home from '../views/Home/home.vue'
-import cadastro from '../views/Cadastro/cadastro.vue'
-import login from '../views/Login/login.vue'
-import admin from '../views/Admin/admin.vue'
+import Home from '@/views/Home/home.vue'
+import Cadastro from '@/views/Cadastro/cadastro.vue'
+import Login from '@/views/Login/login.vue'
+import Dashboard from '@/views/Dashboard/dashboard.vue'
+import Administracao from '@/views/Admin/administracao.vue'
+
+const routes = [
+  { path: '/', name: 'Home', component: Home },
+  { path: '/Cadastro', name: 'Cadastro', component: Cadastro },
+  { path: '/Login', name: 'Login', component: Login },
+  { path: '/Dashboard', name: 'Dashboard', component: Dashboard },
+  { path: '/Adiminstracao', name: 'Adiminstracao', component: Administracao },
+]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/Home', 
-      name: 'home',
-      component: () => import('../views/Home/home.vue'),
-      component: home
-    },
-    {
-      path: '/Cadastro',
-      name: 'cadastro',
-      component: () => import('../views/Cadastro/cadastro.vue'),
-      component: cadastro
-    },
-
-    {
-      path: '/Login',
-      name: 'login',
-      component: () => import('../views/Login/login.vue'),
-      component: login
-    },
-
-    {
-      path: '/Admin',
-      name: 'admin',
-      component: () => import('../views/Admin/admin.vue'),
-      component: admin
-    }
-    
-
-  ],
+  history: createWebHistory(),
+  routes
 })
 
 export default router
