@@ -1,6 +1,6 @@
 <template>
     <div class="min-h-screen bg-gray-50 p-8">
-        <h1 class="text-3xl font-bold mb-6 text-center">
+        <h1 class="main-title">
             ☕ Gerenciamento de Compras de Café ☕
         </h1>
         
@@ -21,5 +21,14 @@
 <script setup>
  import FilaAovivo from '@/components/FilaAoVivo/FilaAovivo.vue';
  import historicoCompras from '@/components/HistoricoCompras/historicoCompras.vue';
- import Navbar from '@/components/Navbar.vue';
  </script>
+
+ <style>
+.main-title {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #674736;
+  margin-bottom: 3rem;
+  text-shadow: 2px 4px 6px #dab49d;
+}
+</style>
