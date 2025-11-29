@@ -99,6 +99,9 @@ async function handleLogin() {
     const response = await axios.post("http://localhost:8000/api/user/login", formData.value)
     localStorage.setItem("token", response.data.token)
     localStorage.setItem("user", JSON.stringify(response.data.user))
+    localStorage.setItem("userId", response.data.user.id);
+    localStorage.setItem("user_id", response.data.user.email);
+    localStorage.setItem("isAdmin", response.data.user.is_admin);
     localStorage.getItem("token")
     
     // Mostra toast de sucesso

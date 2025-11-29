@@ -1,8 +1,9 @@
 <template>
+  <div class="ajuste">
   <div class="bg-white p-6 rounded-2xl shadow-lg min-w-80">
     <!-- Título com ícone -->
     <h2 class="text-2xl font-bold mb-6 text-slate-800 flex items-center gap-2">
-      ☕ Fila de Compras
+      ☕ Fila de pessoas
       <span class="text-sm font-normal text-slate-500">
         ({{ fila.length }} pessoas)
       </span>
@@ -10,45 +11,41 @@
 
     <!-- Lista melhorada -->
     <ul class="space-y-3">
-      <li
-        v-for="(item, index) in fila"
-        :key="item.id"
-        @click="selecionarItem(item)"
-        class="queue-item"
-        :class="[
-          // Classes dinâmicas baseadas na posição
-          index === 0 ? 'first-place' : '',
-          index === 1 ? 'second-place' : '',
-          index === 2 ? 'third-place' : '',
-          'bg-slate-50 p-4 rounded-xl flex items-center justify-between transition-all duration-300 cursor-pointer hover:scale-105 hover:shadow-md'
-        ]"
-      >
-        <!-- Posição com ícone de troféu -->
-        <div class="flex items-center gap-3">
-          <span class="trophy-icon text-2xl">
-            {{ index === 0 ? '🏆' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🔢' }}
-          </span>
-          <span class="position-text font-bold text-lg" :class="getPositionColor(index)">
-            {{ index + 1 }}º
-          </span>
-        </div>
+<li
+  v-for="(item, index) in fila"
+  :key="item.id"
+  @click="selecionarItem(item)"
+  class="queue-item"
+  :class="[
+    index === 0 ? 'first-place' : '',
+    index === 1 ? 'second-place' : '',
+    index === 2 ? 'third-place' : '',
+    'bg-slate-50 p-2 rounded-lg flex items-center justify-between text-sm transition-all duration-200 cursor-pointer hover:scale-105 hover:shadow'
+  ]"
+>
+  <!-- Posição -->
+  <div class="flex items-center gap-1">
+    <span class="trophy-icon text-lg">
+      {{ index === 0 ? '🏆' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🔢' }}
+    </span>
 
-        <!-- Info do cliente -->
-        <div class="flex-1 ml-4">
-          <p class="client-name font-semibold text-slate-800">{{ item.nome }}</p>
-          <p class="client-details text-sm text-slate-500">
-            ID: #{{ item.id.toString().padStart(3, '0') }}
-          </p>
-        </div>
+    <span class="position-text font-bold text-base" :class="getPositionColor(index)">
+      {{ index + 1 }}º
+    </span>
+  </div>
 
-        <!-- Quantidade de café -->
-        <div class="amount-badge">
-          <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm font-bold">
-            {{ item.quantidade }}kg
-          </span>
-        </div>
-      </li>
+  <!-- Info -->
+  <div class="flex-1 ml-2">
+    <p class="client-name font-semibold text-slate-800 text-base">{{ item.name }}</p>
+    <p class="client-details text-xs text-slate-500">
+      ID: #{{ item.id.toString().padStart(3, '0') }}
+    </p>
+  </div>
+</li>
+
     </ul>
+
+    
 
     <!-- Mensagem quando vazio -->
     <div v-if="fila.length === 0" class="text-center py-8 text-slate-400">
@@ -56,17 +53,29 @@
       <p class="text-sm">Todos foram atendidos</p>
     </div>
   </div>
+</div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import axios from 'axios'
 
-// Dados mockados com quantidade
-const fila = ref([
-  { id: 1, nome: 'João', quantidade: 10 },
-  { id: 2, nome: 'Maria', quantidade: 2 },
-  { id: 3, nome: 'Pedro', quantidade: 30 },
-])
+const fila = ref([])
+const carregando = ref(false)
+const erro = ref(null)
+
+// const listarFila = async () => {
+//   try {
+//     const response = await axios.get('http://localhost:8000/api/fila')
+//     fila.value = response.data
+//   } catch (error) {
+//     console.error('Erro ao buscar fila:', error)
+//   } finally {
+//     carregando.value = false
+//   }
+// }
+
+// listarFila()
 
 // Função para retornar cor baseada na posição
 const getPositionColor = (index) => {
@@ -77,10 +86,40 @@ const getPositionColor = (index) => {
 }
 
 // Ação ao clicar no item
-const selecionarItem = (item) => {
-  console.log('Selecionado:', item)
+const selecionarItem = (pessoa) => {
+  console.log('Selecionado:', pessoa)
   // Você pode emitir um evento ou chamar uma API aqui
+
 }
+
+
+ async function carregarFila() {
+
+
+  carregando.value = true
+  erro.value = null
+
+  try {
+    const token = localStorage.getItem("token")
+
+    const res = await axios.get("http://localhost:8000/api/fila/", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json"
+      }
+    })
+
+    fila.value = res.data // ✔ Axios usa res.data
+  } 
+  catch (e) {
+    erro.value = "Falha ao carregar usuários."
+    console.error("Erro ao carregar usuários:", e)
+  }
+  finally {
+    carregando.value = false
+  }
+}
+carregarFila()
 </script>
 
 <style scoped>
@@ -128,5 +167,10 @@ const selecionarItem = (item) => {
 
 .first-place {
   animation: pulse 2s infinite;
+}
+
+.ajuste {
+  width: 100%;
+  height: 50%;
 }
 </style>

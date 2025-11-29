@@ -1,6 +1,10 @@
 <template>
-    <fieldset>
-        <legend>Admin</legend>
-    </fieldset>
-    <h1>Admin</h1>
+    <CadastroAdmin />
+    <ListarAdmins />
 </template>
+
+
+<script setup>
+import CadastroAdmin from '../../components/Administracao/CadastroAdmin/CadastroAdmin.vue'    
+import ListarAdmins from '../../components/Administracao/ListarAdmins/ListarAdmins.vue'
+</script>

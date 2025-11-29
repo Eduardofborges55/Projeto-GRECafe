@@ -16,10 +16,9 @@ import { ref } from 'vue';
 import axios from 'axios';
 import { createPinia } from 'pinia';
 
-const compras = ref([
-    { id: 1, user_id: 1, created_at: '2023-08-01', amount: 5 },
-    { id: 2, user_id: 2, created_at: '2023-08-02', amount: 3 },
-]);
+const compras = ref([]);
+const carregando = ref(false);
+const erro = ref(null);
 
 const formatDate = (dateString) => {
     const date  = new Date(dateString);
@@ -30,18 +29,50 @@ const formatDate = (dateString) => {
     });
 };
 
+async function carregarCompras() {
+    carregando.value = true;
+    erro.value = null;
+
+    try {
+        const token = localStorage.getItem("token");
+
+        const res = await axios.get("http://localhost:8000/api/compra/", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application/json"
+            }
+        });
+
+        compras.value = res.data;
+    } catch (e) {
+        erro.value = "Falha ao carregar compras.";
+        console.error("Erro ao carregar compras:", e);
+    } finally {
+        carregando.value = false;
+    }
+}
+
+carregarCompras();
 
 </script>
 
 <style scoped>
-    .card {
-        background: white;
+/* Dentro de historicoCompras.vue <style scoped> */
+.card {
+       background: white;
         padding: 2rem;
         border-radius: 16px;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        max-width: 600px;
-        margin: 2rem auto;
-    }
+        
+        /* Largura fixada em 600px, e não 100% */
+        width: 600px; /* Altere de max-width para width */
+        max-width: 600px; 
+        margin: 0 auto;
+        margin-top: 2rem; 
+        margin-bottom: 2rem;
+        margin-left: 0;
+        margin-right: 0;
+}
 
     .card-title {
     font-size: 1.5rem;

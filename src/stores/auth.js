@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    token: localStorage.getItem('user'),
+    token: localStorage.getItem('token') || null,
     user: null,
     loading: false,
     error: null,

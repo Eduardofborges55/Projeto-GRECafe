@@ -9,7 +9,7 @@
     <button class="menu-link" @click="logout">Sair</button>
   </template>
   <template v-if="isAdmin">
-    <router-link to="/Administracao" class="menu-link">Administração</router-link>
+    <router-link to="/Admin" class="menu-link">Administração</router-link>
 </template>
   </nav>
 </template>
@@ -17,6 +17,7 @@
 <script setup>
 import { computed, onMounted } from 'vue';
 import { useAuthStore } from '@/stores/auth';
+
 
 const auth = useAuthStore();
 
@@ -40,6 +41,7 @@ function logout() {
   auth.logout();
   window.location.href = '/Login';
 }
+
 </script>
 
 
