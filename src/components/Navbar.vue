@@ -1,17 +1,27 @@
+
 <template>
-  <nav class="menu-container">
-  <router-link to="/" class="menu-link">Home</router-link>
-  <template v-if="!isLoggedIn">
-  <router-link to="/Cadastro" class="menu-link">Cadastro</router-link>
-  <router-link to="/Login" class="menu-link">Login</router-link>
+
+<nav class="menu-container">
+  
+  <!-- ESQUERDA -->
+  <div class="menu-left">
+    <router-link to="/" class="menu-link">Home</router-link>
+
+    <template v-if="isAdmin">
+      <router-link to="/Admin" class="menu-link">Administração</router-link>
+    </template>
+
+    <template v-if="!isLoggedIn">
+      <router-link to="/Cadastro" class="menu-link">Cadastro</router-link>
+      <router-link to="/Login" class="menu-link">Login</router-link>
+    </template>
+  </div>
+
+  <!-- DIREITA: SOMENTE O SAIR -->
+  <template v-if="isLoggedIn">
+    <button class="menu-link logout" @click="logout">Sair</button>
   </template>
-  <template v-else>
-    <button class="menu-link" @click="logout">Sair</button>
-  </template>
-  <template v-if="isAdmin">
-    <router-link to="/Admin" class="menu-link">Administração</router-link>
-</template>
-  </nav>
+</nav>
 </template>
 
 <script setup>
@@ -48,12 +58,19 @@ function logout() {
 <style>
 .menu-container {
   display: flex;
-  gap: 2rem;
+  align-items: center;
   padding: 1rem 2rem;
+
   background-color: #674736;
-  border-radius: 8px;
-  margin: 1rem;
+  border-radius: 0;
+
+  width: 100%;
+  box-sizing: border-box;
+
+  /* Mágica para jogar o Sair para o canto direito */
+  justify-content: space-between;
 }
+
 
 .menu-link {
   color: #dab49d;
@@ -75,4 +92,28 @@ function logout() {
   background-color: #7B3F00;
   color: #9e806e;
 }
+
+.menu-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 1rem 2rem;
+  background-color: #674736;
+  border-radius: 8px;
+  margin: 1rem;
+}
+
+/* Mantém os links na esquerda */
+.menu-left {
+  display: flex;
+  gap: 2rem;
+}
+
+/* Botão Sair no canto */
+.logout {
+  margin-left: auto;
+}
+
+
 </style>

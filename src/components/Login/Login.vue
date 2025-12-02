@@ -96,27 +96,35 @@ async function handleLogin() {
   errorMessage.value = ""
 
   try {
-    const response = await axios.post("http://localhost:8000/api/user/login", formData.value)
+    const response = await axios.post(
+      "http://localhost:8000/api/user/login",
+      formData.value
+    )
+
+    // Salva corretamente
     localStorage.setItem("token", response.data.token)
     localStorage.setItem("user", JSON.stringify(response.data.user))
-    localStorage.setItem("userId", response.data.user.id);
-    localStorage.setItem("user_id", response.data.user.email);
-    localStorage.setItem("isAdmin", response.data.user.is_admin);
-    localStorage.getItem("token")
-    
-    // Mostra toast de sucesso
+    localStorage.setItem("userId", response.data.user.id)
+    localStorage.setItem("email", response.data.user.email)
+    localStorage.setItem("is_admin", response.data.user.is_admin)
+
+    // Configura o axios globalmente
+    axios.defaults.headers.common["Authorization"] =
+      `Bearer ${response.data.token}`
+
     showSuccess.value = true
     
-    // Redireciona com delay para ver a animação
     setTimeout(() => {
       window.location.href = "/dashboard"
-    }, 1500)
+    }, 1200)
+
   } catch (error) {
     errorMessage.value = error.response?.data?.message || "Credenciais inválidas."
   } finally {
     loading.value = false
   }
 }
+
 </script>
 
 <style scoped>
